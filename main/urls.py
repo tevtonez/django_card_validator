@@ -1,8 +1,9 @@
+"""main app urls."""
 from django.conf.urls import url
-from . import views
+from main.views import checksum
 
-#app_name = ' TYPE APP NAME HERE AND UNCOMMENT!!! '
+app_name = 'main'
 
 urlpatterns = [
-    # url(r'^$', views.index, name='app_index'),
+    url(r'^check_number/$', checksum, name='check'),
 ]

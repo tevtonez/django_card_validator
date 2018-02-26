@@ -1,20 +1,22 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+"""Views."""
 
-from django.urls import reverse_lazy, reverse
-from django.views.generic import FormView, View, TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.http import JsonResponse
 
-from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
+from django.views.generic import FormView
 
 from main.forms import CardValidatorForm
 
 
 class IndexView(FormView):
+    """Main view."""
+
     template_name = 'index.html'
     form_class = CardValidatorForm
     success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
+        """Get context data."""
         print("processing get")
         context = super(IndexView, self).get_context_data(**kwargs)
         print(context)
@@ -22,7 +24,7 @@ class IndexView(FormView):
 
 
 def checksum(request):
-
+    """Endpoint to check the card number."""
     result = 'Entered card number is Invalid!'
     result_class = 'danger'
     card_number = str(request.GET.get('card_number', None))

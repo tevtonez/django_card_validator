@@ -3,7 +3,7 @@ $("#button").click(function () {
   $("#result").removeClass();
 
   $.ajax({
-    url: "/check_number/",
+    url: "api/check_number/",
     data: {
       'card_number': card_number
     },
