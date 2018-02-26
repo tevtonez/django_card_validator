@@ -23,18 +23,11 @@ class IndexView(FormView):
 
 def checksum(request):
 
-    form = CardValidatorForm(request.POST)
+    result = 'Entered card number is Invalid!'
+    result_class = 'danger'
+    card_number = str(request.GET.get('card_number', None))
 
-    print(form)
-
-    result = 'NOT VALID!'
-
-    if request.method == "POST":
-        print(request.POST)
-
-        card_number = str(form.cleaned_data['card_number'])
-        # card_number = '4874120048361894'
-
+    if len(card_number) > 0:
         sum = 0
         num_digits = len(card_number)
         oddeven = num_digits & 1
@@ -50,7 +43,11 @@ def checksum(request):
             sum = sum + digit
 
         if (sum % 10) == 0:
-            result = 'VALID!'
+            result = 'Your card number is Valid!'
+            result_class = 'success'
 
-    data = {'result': result}
+    data = {
+        'result': result,
+        'result_class': result_class
+    }
     return JsonResponse(data)

@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
+    <title>Card Validator</title>
         {% load bootstrap3 %}
         {% bootstrap_css %}
         <script src="https:{% bootstrap_jquery_url %}"></script>
@@ -20,6 +20,13 @@
         {% block body_block %}
         {% endblock %}
     </div>
+
+    <script> src="http://code.jquery.com/jquery-3.3.1.min.js" </script>
+
+
+    {% block javascript %}
+    <script src="{% static 'js/validate.js' %}"></script>
+    {% endblock javascript %}
 
 </body>
 </html>
