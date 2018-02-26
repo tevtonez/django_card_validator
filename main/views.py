@@ -43,8 +43,11 @@ def checksum(request):
             sum = sum + digit
 
         if (sum % 10) == 0:
-            result = 'Your card number is Valid!'
+            result = 'Your card number is Valid.'
             result_class = 'success'
+
+    else:
+        result = 'Please enter card number.'
 
     data = {
         'result': result,
