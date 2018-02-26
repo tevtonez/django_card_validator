@@ -15,7 +15,7 @@
             <p id="result"></p>
         </div>
         <div class="col-sm-12">
-            <form method="" action="">
+            <form id="validator" method="" action="javascript:void(0);">
                 {% csrf_token %}
                 {{form.as_p}}
             </form>
