@@ -45,7 +45,7 @@ class TestApiEndpoint(TestCase):
         )
 
     def test_incorrect_input(self):
-        """Unhappy path: incorrect input - non-integers."""
+        """Unhappy path: non-integers input."""
         self.response = self.client.post('/api/check_number/', {
             'card_number': self.chars_input
         })
@@ -60,7 +60,7 @@ class TestApiEndpoint(TestCase):
         )
 
     def test_empty_input(self):
-        """Unhappy path: incorrect input - non-integers."""
+        """Unhappy path: empty input."""
         self.response = self.client.post('/api/check_number/', {
             'card_number': self.empty_input
         })
