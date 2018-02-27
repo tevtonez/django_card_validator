@@ -26,3 +26,18 @@ class TestApiEndpoint(TestCase):
             response_dict['result'],
             'Your card number is Valid.'
         )
+
+    def test_incorrect_num(self):
+        """Unhappy path: card number is invalid."""
+        self.response = self.client.post('/api/check_number/', {
+            'card_number': self.invalid_card_number
+        })
+
+        response_dict = json.loads(self.response.content.decode("utf-8"))
+
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(response_dict['result_class'], 'danger')
+        self.assertEqual(
+            response_dict['result'],
+            'Entered card number is Invalid!'
+        )
