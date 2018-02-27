@@ -11,7 +11,8 @@ class TestApiEndpoint(TestCase):
         self.client = Client()
         self.valid_card_number = '349489219405037'
         self.invalid_card_number = '349489219405039'
-        self.chars_number = "abc234543636"
+        self.chars_input = 'abc234543636'
+        self.empty_input = ''
 
     def test_correct_num(self):
         """Happy path: card number is valid."""
@@ -46,7 +47,7 @@ class TestApiEndpoint(TestCase):
     def test_incorrect_input(self):
         """Unhappy path: incorrect input - non-integers."""
         self.response = self.client.post('/api/check_number/', {
-            'card_number': self.chars_number
+            'card_number': self.chars_input
         })
 
         response_dict = json.loads(self.response.content.decode("utf-8"))
@@ -56,4 +57,19 @@ class TestApiEndpoint(TestCase):
         self.assertEqual(
             response_dict['result'],
             "Please enter digits only."
+        )
+
+    def test_empty_input(self):
+        """Unhappy path: incorrect input - non-integers."""
+        self.response = self.client.post('/api/check_number/', {
+            'card_number': self.empty_input
+        })
+
+        response_dict = json.loads(self.response.content.decode("utf-8"))
+
+        self.assertEqual(self.response.status_code, 200)
+        self.assertEqual(response_dict['result_class'], 'danger')
+        self.assertEqual(
+            response_dict['result'],
+            "Please enter card number."
         )
