@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from main.forms import CardValidatorForm
 
+import unicodedata
+
 
 class IndexView(FormView):
     """Main view."""
@@ -29,28 +31,48 @@ def checksum(request):
     result_class = 'danger'
 
     if request.method == 'POST':
+
         card_number = str(request.POST.get('card_number', None))
+        is_number = False
+
+        try:
+            float(card_number)
+            is_number = True
+        except ValueError:
+            pass
+
+        try:
+            unicodedata.numeric(card_number)
+            is_number = True
+        except (TypeError, ValueError):
+            pass
+
         if len(card_number) > 0:
-            sum = 0
-            num_digits = len(card_number)
-            oddeven = num_digits & 1
 
-            for count in range(0, num_digits):
-                digit = int(card_number[count])
+            if is_number:
+                sum = 0
+                num_digits = len(card_number)
 
-                if not ((count & 1) ^ oddeven):
-                    digit = digit * 2
-                if digit > 9:
-                    digit = digit - 9
+                oddeven = num_digits & 1
 
-                sum = sum + digit
+                for count in range(0, num_digits):
+                    digit = int(card_number[count])
 
-            if (sum % 10) == 0:
-                result = 'Your card number is Valid.'
-                result_class = 'success'
+                    if not ((count & 1) ^ oddeven):
+                        digit = digit * 2
+                    if digit > 9:
+                        digit = digit - 9
+
+                    sum = sum + digit
+
+                if (sum % 10) == 0:
+                    result = 'Your card number is Valid.'
+                    result_class = 'success'
+            else:
+                result = 'Please enter digits only.'
 
         else:
-            result = 'Please enter card number.'
+            result = 'Please enter a card number.'
 
         data = {
             'result': result,
