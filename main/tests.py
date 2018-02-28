@@ -6,6 +6,28 @@ import json
 class TestApiEndpoint(TestCase):
     """Testing card number validation endpoint."""
 
+    def assert_response(
+        self,
+        response,
+        str_response,
+        str_class
+    ):
+        """
+        Assert response from the api endpoint.
+
+        Takes response, expected message as a string 'str_response'
+        and expected css class as a string 'str_class' then asserts api
+        endpoint response.
+        """
+        response_dict = json.loads(response.content.decode('utf-8'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response_dict['result_class'], str_class)
+        self.assertEqual(
+            response_dict['result'],
+            str_response
+        )
+
     def setUp(self):
         """Test setup."""
         self.client = Client()
@@ -20,14 +42,8 @@ class TestApiEndpoint(TestCase):
             'card_number': self.valid_card_number
         })
 
-        response_dict = json.loads(self.response.content.decode("utf-8"))
-
-        self.assertEqual(self.response.status_code, 200)
-        self.assertEqual(response_dict['result_class'], 'success')
-        self.assertEqual(
-            response_dict['result'],
-            'Your card number is Valid.'
-        )
+        self.assert_response(
+            self.response, 'Your card number is Valid.', 'success')
 
     def test_incorrect_num(self):
         """Unhappy path: card number is invalid."""
@@ -35,14 +51,8 @@ class TestApiEndpoint(TestCase):
             'card_number': self.invalid_card_number
         })
 
-        response_dict = json.loads(self.response.content.decode("utf-8"))
-
-        self.assertEqual(self.response.status_code, 200)
-        self.assertEqual(response_dict['result_class'], 'danger')
-        self.assertEqual(
-            response_dict['result'],
-            'Entered card number is Invalid!'
-        )
+        self.assert_response(
+            self.response, 'Entered card number is Invalid!', 'danger')
 
     def test_incorrect_input(self):
         """Unhappy path: non-integers input."""
@@ -50,14 +60,8 @@ class TestApiEndpoint(TestCase):
             'card_number': self.chars_input
         })
 
-        response_dict = json.loads(self.response.content.decode("utf-8"))
-
-        self.assertEqual(self.response.status_code, 200)
-        self.assertEqual(response_dict['result_class'], 'danger')
-        self.assertEqual(
-            response_dict['result'],
-            "Please enter digits only."
-        )
+        self.assert_response(
+            self.response, 'Please enter digits only.', 'danger')
 
     def test_empty_input(self):
         """Unhappy path: empty input."""
@@ -65,11 +69,5 @@ class TestApiEndpoint(TestCase):
             'card_number': self.empty_input
         })
 
-        response_dict = json.loads(self.response.content.decode("utf-8"))
-
-        self.assertEqual(self.response.status_code, 200)
-        self.assertEqual(response_dict['result_class'], 'danger')
-        self.assertEqual(
-            response_dict['result'],
-            "Please enter card number."
-        )
+        self.assert_response(
+            self.response, 'Please enter a card number.', 'danger')

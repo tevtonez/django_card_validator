@@ -72,7 +72,7 @@ def checksum(request):
                 result = 'Please enter digits only.'
 
         else:
-            result = 'Please enter card number.'
+            result = 'Please enter a card number.'
 
         data = {
             'result': result,
